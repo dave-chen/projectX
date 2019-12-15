@@ -35,7 +35,7 @@ import (
 	"contrib.go.opencensus.io/exporter/stackdriver"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/sirupsen/logrus"
-	"go.opencensus.io/exporter/jaeger"
+	//"github.com/uber/jaeger-client-go"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/trace"
@@ -127,26 +127,26 @@ func run(port string) string {
 	return l.Addr().String()
 }
 
-func initJaegerTracing() {
-	svcAddr := os.Getenv("JAEGER_SERVICE_ADDR")
-	if svcAddr == "" {
-		log.Info("jaeger initialization disabled.")
-		return
-	}
-	// Register the Jaeger exporter to be able to retrieve
-	// the collected spans.
-	exporter, err := jaeger.NewExporter(jaeger.Options{
-		Endpoint: fmt.Sprintf("http://%s", svcAddr),
-		Process: jaeger.Process{
-			ServiceName: "productcatalogservice",
-		},
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	trace.RegisterExporter(exporter)
-	log.Info("jaeger initialization completed.")
-}
+//func initJaegerTracing() {
+//	svcAddr := os.Getenv("JAEGER_SERVICE_ADDR")
+//	if svcAddr == "" {
+//		log.Info("jaeger initialization disabled.")
+//		return
+//	}
+//	// Register the Jaeger exporter to be able to retrieve
+//	// the collected spans.
+//	exporter, err := jaeger.NewExporter(jaeger.Options{
+//		Endpoint: fmt.Sprintf("http://%s", svcAddr),
+//		Process: jaeger.Process{
+//			ServiceName: "productcatalogservice",
+//		},
+//	})
+//	if err != nil {
+//		log.Fatal(err)
+//	}
+//	trace.RegisterExporter(exporter)
+//	log.Info("jaeger initialization completed.")
+//}
 
 func initStats(exporter *stackdriver.Exporter) {
 	view.SetReportingPeriod(60 * time.Second)
@@ -182,7 +182,7 @@ func initStackdriverTracing() {
 }
 
 func initTracing() {
-	initJaegerTracing()
+	//initJaegerTracing()
 	initStackdriverTracing()
 }
 
@@ -213,7 +213,7 @@ type productCatalog struct{}
 func readCatalogFile(catalog *pb.ListProductsResponse) error {
 	catalogMutex.Lock()
 	defer catalogMutex.Unlock()
-	catalogJSON, err := ioutil.ReadFile("products.json")
+	catalogJSON, err := ioutil.ReadFile("src/productcatalogservice/products.json")
 	if err != nil {
 		log.Fatalf("failed to open product catalog json file: %v", err)
 		return err
