@@ -24,15 +24,6 @@
   version = "v0.5.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:a85b0dc359de4812d383ee6670f0dae595cfcb8b13ff6b872bdb013a18c37b07"
-  name = "git.apache.org/thrift.git"
-  packages = ["lib/go/thrift"]
-  pruneopts = "UT"
-  revision = "286eee16b147a302ddc7b10740c5e5401ebbec17"
-  source = "github.com/apache/thrift"
-
-[[projects]]
   digest = "1:4287343c81d259e828b2e3b579270139a498a2168fbab81d89c3b9926b4ec740"
   name = "github.com/GoogleCloudPlatform/microservices-demo"
   packages = [
@@ -94,6 +85,18 @@
   version = "v1.0.2"
 
 [[projects]]
+  digest = "1:b640f196e31078d2ff78476ccb4487b5ac71c7a6f5be8ca2b7f5bb45cd215a07"
+  name = "github.com/mailjet/mailjet-apiv3-go"
+  packages = [
+    ".",
+    "fixtures",
+    "resources",
+  ]
+  pruneopts = "UT"
+  revision = "4597cb4aae1236575fcd3f7c09544191e1e0aa35"
+  version = "2.4.5"
+
+[[projects]]
   digest = "1:04457f9f6f3ffc5fea48e71d62f2ca256637dee0a04d710288e27e05c8b41976"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
@@ -102,12 +105,10 @@
   version = "v1.4.2"
 
 [[projects]]
-  digest = "1:a5154dfd6b37bef5a3eab759e13296348e639dc8c7604f538368167782b08ccd"
+  digest = "1:1bb914cfb78f68f488a91cd7872d3d06a5f83c5bbacf0296dbef44e120b00a91"
   name = "go.opencensus.io"
   packages = [
     ".",
-    "exporter/jaeger",
-    "exporter/jaeger/internal/gen-go/jaeger",
     "internal",
     "internal/tagencoding",
     "plugin/ocgrpc",
@@ -322,8 +323,8 @@
     "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money",
     "github.com/golang/protobuf/proto",
     "github.com/google/uuid",
+    "github.com/mailjet/mailjet-apiv3-go",
     "github.com/sirupsen/logrus",
-    "go.opencensus.io/exporter/jaeger",
     "go.opencensus.io/plugin/ocgrpc",
     "go.opencensus.io/stats/view",
     "go.opencensus.io/trace",

@@ -34,8 +34,9 @@ import (
 	"google.golang.org/grpc/status"
 
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto"
-	money "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money"
+	"github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
+	"github.com/mailjet/mailjet-apiv3-go"
 )
 
 const (
@@ -382,15 +383,19 @@ func (cs *checkoutService) chargeCard(ctx context.Context, amount *pb.Money, pay
 }
 
 func (cs *checkoutService) sendOrderConfirmation(ctx context.Context, email string, order *pb.OrderResult) error {
-	conn, err := grpc.DialContext(ctx, cs.emailSvcAddr, grpc.WithInsecure(), grpc.WithStatsHandler(&ocgrpc.ClientHandler{}))
-	if err != nil {
-		return fmt.Errorf("failed to connect email service: %+v", err)
-	}
-	defer conn.Close()
-	_, err = pb.NewEmailServiceClient(conn).SendOrderConfirmation(ctx, &pb.SendOrderConfirmationRequest{
-		Email: email,
-		Order: order})
-	return err
+	sendEmail(email, order)
+
+	//
+	//conn, err := grpc.DialContext(ctx, cs.emailSvcAddr, grpc.WithInsecure(), grpc.WithStatsHandler(&ocgrpc.ClientHandler{}))
+	//if err != nil {
+	//	return fmt.Errorf("failed to connect email service: %+v", err)
+	//}
+	//defer conn.Close()
+	//_, err = pb.NewEmailServiceClient(conn).SendOrderConfirmation(ctx, &pb.SendOrderConfirmationRequest{
+	//	Email: email,
+	//	Order: order})
+	return nil
+	//return err
 }
 
 func (cs *checkoutService) shipOrder(ctx context.Context, address *pb.Address, items []*pb.CartItem) (string, error) {
@@ -408,4 +413,41 @@ func (cs *checkoutService) shipOrder(ctx context.Context, address *pb.Address, i
 	return resp.GetTrackingId(), nil
 }
 
+
+func sendEmail(email string, order *pb.OrderResult) {
+	mailjetClient := mailjet.NewMailjetClient("05e0e6adba274f34942ecd1a54959ee7", "3905dcfbdfc83c1b2d944101e9a56160")
+	orderId := order.OrderId
+	//orderItems := order.Items
+	htmlpart1 := "<h3>Dear customer, here is your Order ID</h3>" + "<h3>" + orderId + "</h3>"
+
+
+	//for _, item := range orderItems {
+	//	htmlpart1 = htmlpart1 + item.Item.ProductId + item.ProductInfo.Name
+	//}
+
+	messagesInfo := []mailjet.InfoMessagesV31 {
+		mailjet.InfoMessagesV31{
+			From: &mailjet.RecipientV31{
+				Email: "dave.chen80@gmail.com",
+				Name: "D&C",
+			},
+			To: &mailjet.RecipientsV31{
+				mailjet.RecipientV31 {
+					Email: email,
+					Name: "Order confirmation",
+				},
+			},
+			Subject: "Order Confirmation",
+			HTMLPart:  htmlpart1 +
+				"<br />Thank you for your order!",
+			CustomID: "AppGettingStartedTest",
+		},
+	}
+	messages := mailjet.MessagesV31{Info: messagesInfo }
+	res, err := mailjetClient.SendMailV31(&messages)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Data: %+v\n", res)
+}
 // TODO: Dial and create client once, reuse.
