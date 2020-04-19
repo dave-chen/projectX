@@ -18,7 +18,7 @@ import (
 	"context"
 	"time"
 
-	pb "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
+	pb "projectX/src/frontend/genproto"
 
 	"github.com/pkg/errors"
 )
@@ -64,12 +64,13 @@ func (fe *frontendServer) emptyCart(ctx context.Context, userID string) error {
 	return err
 }
 
-func (fe *frontendServer) insertCart(ctx context.Context, userID, productID string, quantity int32) error {
+func (fe *frontendServer) insertCart(ctx context.Context, userID, productID string, productName string, quantity int32) error {
 	_, err := pb.NewCartServiceClient(fe.cartSvcConn).AddItem(ctx, &pb.AddItemRequest{
 		UserId: userID,
 		Item: &pb.CartItem{
 			ProductId: productID,
-			Quantity:  quantity},
+			Quantity:  quantity,
+			ProductName: productName},
 	})
 	return err
 }

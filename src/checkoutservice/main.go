@@ -33,8 +33,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pb "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto"
-	"github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money"
+	pb "projectX/src/checkoutservice/genproto"
+	"projectX/src/checkoutservice/money"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"github.com/mailjet/mailjet-apiv3-go"
 )
@@ -417,8 +417,8 @@ func (cs *checkoutService) shipOrder(ctx context.Context, address *pb.Address, i
 func sendEmail(email string, order *pb.OrderResult) {
 	mailjetClient := mailjet.NewMailjetClient("05e0e6adba274f34942ecd1a54959ee7", "3905dcfbdfc83c1b2d944101e9a56160")
 	orderId := order.OrderId
-	//orderItems := order.Items
-	htmlpart1 := "<h3>Dear customer, here is your Order ID</h3>" + "<h3>" + orderId + "</h3>"
+	productName := order.Items[0].Item.ProductName
+	htmlpart1 := "<h3>Dear customer, here is your Order ID</h3>" + "<h3>" + orderId + "</h3> + <h3> " + productName + "</h3>"
 
 
 	//for _, item := range orderItems {

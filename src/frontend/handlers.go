@@ -28,8 +28,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	pb "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
-	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/money"
+	pb "projectX/src/frontend/genproto"
+	"projectX/src/frontend/money"
 )
 
 var (
@@ -148,6 +148,7 @@ func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Reques
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
 	quantity, _ := strconv.ParseUint(r.FormValue("quantity"), 10, 32)
 	productID := r.FormValue("product_id")
+	productName := r.FormValue("product_name")
 	if productID == "" || quantity == 0 {
 		renderHTTPError(log, r, w, errors.New("invalid form input"), http.StatusBadRequest)
 		return
@@ -160,7 +161,7 @@ func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	if err := fe.insertCart(r.Context(), sessionID(r), p.GetId(), int32(quantity)); err != nil {
+	if err := fe.insertCart(r.Context(), sessionID(r), p.GetId(), productName, int32(quantity)); err != nil {
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to add to cart"), http.StatusInternalServerError)
 		return
 	}

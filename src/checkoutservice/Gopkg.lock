@@ -24,12 +24,9 @@
   version = "v0.5.0"
 
 [[projects]]
-  digest = "1:4287343c81d259e828b2e3b579270139a498a2168fbab81d89c3b9926b4ec740"
+  digest = "1:dfb01e6f3fd6304cc863e9d61399d013de4c3b68de156083d88cb595e4351ac3"
   name = "github.com/GoogleCloudPlatform/microservices-demo"
-  packages = [
-    "src/checkoutservice/genproto",
-    "src/checkoutservice/money",
-  ]
+  packages = ["src/checkoutservice/genproto"]
   pruneopts = "UT"
   revision = "27df445fc20f048c1c31e429f6c29075119fe454"
   version = "v0.1.1"
@@ -320,7 +317,6 @@
     "cloud.google.com/go/profiler",
     "contrib.go.opencensus.io/exporter/stackdriver",
     "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto",
-    "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money",
     "github.com/golang/protobuf/proto",
     "github.com/google/uuid",
     "github.com/mailjet/mailjet-apiv3-go",
@@ -328,7 +324,6 @@
     "go.opencensus.io/plugin/ocgrpc",
     "go.opencensus.io/stats/view",
     "go.opencensus.io/trace",
-    "golang.org/x/net/context",
     "google.golang.org/grpc",
     "google.golang.org/grpc/codes",
     "google.golang.org/grpc/health/grpc_health_v1",
